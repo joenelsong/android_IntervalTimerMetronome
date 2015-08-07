@@ -1,0 +1,62 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context="com.joeynelson.timer.ControlsFragment"
+    android:orientation="horizontal">
+
+        <Switch
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/switch1"
+            android:checked="false"
+            android:layout_weight=".6"
+            android:enabled="true"
+            android:layout_marginRight="20dp" />
+
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="4"
+            android:id="@+id/editText"
+            android:layout_weight="1"
+            android:numeric="integer"
+ />
+
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="3"
+            android:id="@+id/paceText1"
+            android:layout_weight="1"
+            android:text="60"
+            android:numeric="integer"
+            android:maxLength="3"
+/>
+
+    <Spinner
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/rythmspinner1"
+        android:layout_weight=".5"
+        android:entries="@array/time_signatures"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="/"
+        android:id="@+id/textView4"
+        android:layout_weight=".1" />
+
+    <Spinner
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/rythmspinner2"
+        android:layout_weight=".5"
+        android:entries="@array/time_signatures"/>
+
+</LinearLayout>
