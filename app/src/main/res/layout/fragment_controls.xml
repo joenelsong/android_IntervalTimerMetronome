@@ -11,7 +11,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/switch1"
             android:checked="false"
-            android:layout_weight=".6"
+            android:layout_weight=".5"
             android:enabled="true"
             android:layout_marginRight="20dp" />
 
@@ -21,7 +21,7 @@
             android:inputType="number"
             android:ems="4"
             android:id="@+id/editText"
-            android:layout_weight="1"
+            android:layout_weight=".9"
             android:numeric="integer"
  />
 
@@ -31,7 +31,7 @@
             android:inputType="number"
             android:ems="3"
             android:id="@+id/paceText1"
-            android:layout_weight="1"
+            android:layout_weight=".9"
             android:text="60"
             android:numeric="integer"
             android:maxLength="3"
@@ -41,7 +41,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/rythmspinner1"
-        android:layout_weight=".5"
+        android:layout_weight=".6"
         android:entries="@array/time_signatures"/>
 
     <TextView
@@ -56,7 +56,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/rythmspinner2"
-        android:layout_weight=".5"
-        android:entries="@array/time_signatures"/>
+        android:layout_weight=".6"
+        android:entries="@array/time_signatures" />
 
 </LinearLayout>
