@@ -1,15 +1,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:id="@+id/controlLayout"
     android:layout_height="wrap_content"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context="com.joeynelson.timer.ControlsFragment"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="#0f0b29f5">
 
         <Switch
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/switch1"
+            android:id="@+id/queueSwitch"
             android:checked="false"
             android:layout_weight=".5"
             android:enabled="true"
@@ -19,18 +21,40 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:ems="4"
-            android:id="@+id/editText"
-            android:layout_weight=".9"
+            android:ems="2"
+            android:id="@+id/editTextMinutes"
+            android:layout_weight=".4"
             android:numeric="integer"
- />
+        android:text="00"
+        android:maxLength="2"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text=":"
+        android:id="@+id/textViewColon"
+        android:layout_weight=".1" />
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="2"
+        android:id="@+id/editTextSeconds"
+        android:layout_weight=".4"
+        android:numeric="integer"
+        android:text="00"
+        android:maxLength="2"
+        android:layout_marginRight="5dp" />
 
     <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="3"
-            android:id="@+id/paceText1"
+            android:id="@+id/paceText"
             android:layout_weight=".9"
             android:text="60"
             android:numeric="integer"

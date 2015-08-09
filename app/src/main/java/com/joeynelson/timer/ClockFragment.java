@@ -1,25 +1,29 @@
 package com.joeynelson.timer;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.support.v4.app.FragmentManager;
+import android.widget.LinearLayout;
 
-public class ClockFragment extends Fragment {
-
+public class ClockFragment extends Fragment
+{
     private boolean logging = true;
     private boolean twoPaneLayout;
 
 
+
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (logging) Log.d("FirstFragment", "Start: onCreateView()");
+        if (logging) Log.d("ClockFragment", "Start: onCreateView()");
         View view = inflater.inflate(R.layout.fragment_clock, container, false);
-
-
 
         return view;
     }

@@ -17,25 +17,38 @@
         android:layout_weight=".7"
         android:layout_width="match_parent"
         android:layout_height="0dp" />
-    <fragment android:name= "com.joeynelson.timer.ControlsFragment"
+
+    <LinearLayout
+        android:id="@+id/fragment_container"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6">
+
+    </LinearLayout>
+
+
+</LinearLayout>
+<!--
+ <fragment android:name= "com.joeynelson.timer.ControlsFragment"
         android:id="@+id/controls_fragment1"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp" />
-    <fragment android:name= "com.joeynelson.timer.ControlsFragment"
-        android:id="@+id/controls_fragment2"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp" />
-    <fragment android:name= "com.joeynelson.timer.ControlsFragment"
-        android:id="@+id/controls_fragment3"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp" />
-    <fragment android:name= "com.joeynelson.timer.ControlsFragment"
-        android:id="@+id/controls_fragment4"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp" />
 
-</LinearLayout>
+<fragment android:name= "com.joeynelson.timer.ControlsFragment"
+android:id="@+id/controls_fragment2"
+android:layout_weight="1"
+android:layout_width="match_parent"
+android:layout_height="0dp" />
+<fragment android:name= "com.joeynelson.timer.ControlsFragment"
+android:id="@+id/controls_fragment3"
+android:layout_weight="1"
+android:layout_width="match_parent"
+android:layout_height="0dp" />
+<fragment android:name= "com.joeynelson.timer.ControlsFragment"
+android:id="@+id/controls_fragment4"
+android:layout_weight="1"
+android:layout_width="match_parent"
+android:layout_height="0dp" />
+-->
