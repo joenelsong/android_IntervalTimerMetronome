@@ -30,6 +30,8 @@ public class ControlsFragment extends Fragment {
     public boolean getSwitchState() {   return mSwitch.isChecked();}
     public int getMinutes() {   return Integer.parseInt(mMinutes.getText().toString());    }
     public int getSeconds() {   return Integer.parseInt(mSeconds.getText().toString());    }
+    public int getBpm() {   return Integer.parseInt(mBPM.getText().toString());    }
+
     public Spinner getSpinner1() { return mTimeSigNum; }
     public Spinner getSpinner2() { return mTimeSigDen; }
     public void setSpinner1(int x) { mTimeSigNum.setSelection(x); }

@@ -2,32 +2,32 @@
 <items version="2" >
 
     <item
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="f8efd0096475e0daf054267b61544e10dc776503">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\release\classes-21b4f8e91f87534e8f854b7659cc8e413c447267.jar" />
+    </item>
+    <item
         jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\libs\internal_impl-22.2.1.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
-        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.1-76228ed60b64164a35b9a6b256a6b635e88d048a.jar" />
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\release\internal_impl-22.2.1-76228ed60b64164a35b9a6b256a6b635e88d048a.jar" />
     </item>
     <item
         jar="C:\Users\joey\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.1\support-annotations-22.2.1.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
-        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\support-annotations-22.2.1-2b8873013db38ddd14f93d59b94cbc33c44a7b88.jar" />
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\release\support-annotations-22.2.1-2b8873013db38ddd14f93d59b94cbc33c44a7b88.jar" />
     </item>
     <item
         jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.1\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
-        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\classes-5b686e4515a1a43114814b529efbae1c4fab4503.jar" />
-    </item>
-    <item
-        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="f8efd0096475e0daf054267b61544e10dc776503">
-        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\classes-21b4f8e91f87534e8f854b7659cc8e413c447267.jar" />
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\release\classes-5b686e4515a1a43114814b529efbae1c4fab4503.jar" />
     </item>
 
 </items>
