@@ -14,7 +14,7 @@
             android:text="Queue"
             android:id="@+id/textView3"
             android:layout_weight="1"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp" />
 
         <TextView

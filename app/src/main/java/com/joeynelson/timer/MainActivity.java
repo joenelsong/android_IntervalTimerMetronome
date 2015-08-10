@@ -1,6 +1,7 @@
 package com.joeynelson.timer;
 
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -22,9 +23,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private static final String FORMAT = "%02d:%02d:%02d";
 
     private static int mNumberOfControls;
+    protected int mNumActiveTimerCountDown;
 
     //~// Widgets //~//
     private Button mStartButton;
+    private Button mStopButton;
     private String mTimerState = "STOPPED";
     private TextView mTime;
 
@@ -33,6 +36,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private CountDownTimer mTimer;
     protected int mActiveTimerIndex=0;
     private ControlsFragment[] mControlsFragments;
+
+    // Media Player //
+    protected MediaPlayer mMediaPlayer;
+    protected MediaPlayer mInterIntervalMediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         // Initialize Widgets //
         mStartButton = (Button) findViewById(R.id.start_button);
         mStartButton.setOnClickListener(this);
+
+        mStopButton = (Button) findViewById(R.id.clear_button);
+        mStopButton.setOnClickListener(this);
 
         mTime = (TextView) findViewById(R.id.clock_display);
 
@@ -57,7 +67,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 return;
             }
 
+            //int resID=getResources().getIdentifier("raw/twerkit.mp3", "raw", getPackageName());
+            mMediaPlayer= MediaPlayer.create(this, R.raw.weakpulse_20ms);
+            mInterIntervalMediaPlayer= MediaPlayer.create(this, R.raw.getready_knivesharpen);
+
             mNumberOfControls = 4;
+            mNumActiveTimerCountDown = mNumberOfControls;
             String tag = "";
             ControlsFragment ctrlfrag;
 
@@ -87,7 +102,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         {
         case R.id.start_button: Log.d("onClick", "case R.id.start_button");
             if (mTimerState.equals("STOPPED") && mActiveTimerIndex < mNumberOfControls)   // If a timer hasn't already started then start one, If a timer has started, dont start another one!
-            { Log.d("onClick", "if (mTimerAlreadyStarted = false)");
+            { Log.d("onClick", "if (mTimerState.equals(\"STOPPED\") && mActiveTimerIndex < mNumberOfControls)");
                 mTimerState = "STARTED";
                 //highlightTimer(mActiveTimerIndex);
                 if (mControlsFragments[mActiveTimerIndex].getSwitchState()) {
@@ -96,27 +111,28 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     int secs = mControlsFragments[mActiveTimerIndex].getSeconds();
                     // Create CountDownTimer
                         CreateCountDownTimer( hrs * 3600000 + mins*60000 + secs * 1000 );
-
                 }
             }
             else if (mTimerState.equals("STARTED"))
-            {
+            { Log.d("onClick", "else if (mTimerState.equals(\"STARTED\"))");
                 mTimerState = "PAUSED"; // If the timer had already started, it should now be paused
             }
             else if (mTimerState.equals("PAUSED"))
-            {
+            { Log.d("onClick", "else if (mTimerState.equals(\"PAUSED\"))");
                 mTimerState = "STARTED";
             }
             else { // Case where mActiveTimerIndex is now higher than the number of timers, therefore we must be done.
                 mTime.setText("DONE!");
+                MediaPlayer endMP= MediaPlayer.create(this, R.raw.timer_end_buzzer);
+                endMP.start();
             }
-
-
             break;
 
         case R.id.clear_button: if (logging) Log.d("onClick() ++ed", "case R.id.clear_button");
-            mTimer.cancel();
             mTimerState = "STOPPED";
+            unhighlightTimer(mActiveTimerIndex);
+            mActiveTimerIndex = 0;
+
             break;
         }
 
@@ -138,20 +154,58 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
             public void onTick(long millisUntilFinished) {
 
-                mTime.setText(""+String.format(FORMAT,
+                /******** BEEP SOUND *********/
+                mMediaPlayer.start();
+
+                mTime.setText("" + String.format(FORMAT,
                         TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
                         TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
                                 TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
                         TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
                                 TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+
+                if(mTimerState.equals("STOPPED")) {
+                    //mTimer.onFinish();
+                    //cancel();
+                    mTimer.cancel();
+                }
+
             }
 
-            public void onFinish() { if (logging) Log.d("OnFinish()", "CountdownTimer Finished");
-                mTimerState = "STOPPED";
-                mActiveTimerIndex = mActiveTimerIndex + 1;
-                onClick(mStartButton);
+            public void onFinish()
+            { if (logging) Log.d("OnFinish()", "CountdownTimer Finished");
+
+                mNumActiveTimerCountDown--;
+
+                if (mNumActiveTimerCountDown != 0)
+                {
+                    /******** BEEP SOUND *********/
+                    mInterIntervalMediaPlayer.start();
+                    new CountDownTimer(5000, 1000) { // adjust the milli seconds here
+
+                        public void onTick(long millisUntilFinished) {
+
+                        }
+
+                        public void onFinish() {
+                            mTimerState = "STOPPED";
+                            mActiveTimerIndex = mActiveTimerIndex + 1;
+                            onClick(mStartButton);
+                        }
+                    }.start();
+                }
+                else
+                {
+                    mTimerState = "STOPPED";
+                    mActiveTimerIndex = mActiveTimerIndex + 1;
+                    onClick(mStartButton);
+                }
+
+
             }
         }.start();
+        /******** BEEP SOUND *********/
+        mMediaPlayer.start(); // Beep onces right away
 
     }
     public void highlightTimer(int x)
