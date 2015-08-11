@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="pref_num_of_timers"
+        android:entries="@array/timer_count_options"
+        android:entryValues="@array/timer_count_options"
+        android:title="Select the number of timers to use">
+    </ListPreference>
+    <ListPreference
+        android:key="pref_expiration_warning_duration"
+        android:entries="@array/expiration_warning_options"
+        android:entryValues="@array/expiration_warning_values"
+        android:title="Timer warning flash threshold">
+    </ListPreference>
+
+</PreferenceScreen>

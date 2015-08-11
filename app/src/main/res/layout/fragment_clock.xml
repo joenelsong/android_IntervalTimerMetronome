@@ -27,15 +27,17 @@
             android:text="@string/start_button"
             android:id="@+id/start_button"
             android:layout_weight="2"
-            android:textSize="30dp" />
+            android:textSize="30dp"
+            android:enabled="true" />
 
         <Button
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:text="Clear"
+            android:text="STOP"
             android:id="@+id/clear_button"
             android:layout_weight="1"
-            android:textSize="30dp" />
+            android:textSize="30dp"
+            android:enabled="false" />
     </LinearLayout>
 
 
