@@ -49,12 +49,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // Timer Variables //
     private CountDownTimer mTimer;
     protected int mActiveTimerIndex=0;
+    protected int mPreviousTimerIndex=-1;
     private ControlsFragment[] mControlsFragments;
-    protected int mTickRate = 1000; // milliseconds
 
     // Timer Helper Variables and Index Trackers
     private static final String FORMAT = "%02d:%02d:%02d"; // Format to output time for clock
-    protected int mNumActiveTimerSwitches; // Number of Switches turned on ( Calculated after the start button is pressed )
+    protected int mNumActiveTimerSwitches = -1; // Number of Switches turned on ( Calculated after the start button is pressed )
     protected int mNumberOfExecutedTimers; // Number of Timers that have been executed, compared with mActiveTimerSwitches to know when the last timer has been executed
     protected int mSkippedTimers =0; // Timer indexes that are skipped because they are off need to be accounted for
     private Animation mFlashingTextAnimation;
@@ -99,30 +99,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     { if (logging) Log.d("onClick", "Start");
 
         // Poll Number of Active Timers, Used to determine how long the sequence should be, so we know when to sound the final buzzer
-        if (mNumActiveTimerSwitches == 0) { // No Need to re run this everytime! so only runs if mNumberActiveTimerSwitches is at 0, which means it hasnt' been run yet.
+        if (mNumActiveTimerSwitches == -1)  // Only needs to be run if mNumActiveTimerSwitches has not already ben set, otherwise it grows each itteration
+        {
             for (int i = 0; i < mNumberOfControls; i++) {
-                if (mControlsFragments[i].getSwitchState()) { if (logging) Log.d("onClick", "if (mControlsFragments[i].getSwitchState())" +" getSwitchState("+i+") = "+ mControlsFragments[i].getSwitchState());
+                if (mControlsFragments[i].getSwitchState()) {
+                    if (logging)
+                        Log.d("onClick", "if (mControlsFragments[i].getSwitchState())" + " getSwitchState(" + i + ") = " + mControlsFragments[i].getSwitchState());
                     mNumActiveTimerSwitches++;
                 }
+
             }
         }
-
         switch(view.getId())
         {
         case R.id.start_button: Log.d("onClick", "case R.id.start_button");
             mStartButton.setEnabled(false);
             mStopButton.setEnabled(true); // Enable Stop Button
+
             if (mTimerState.equals("STOPPED") && mActiveTimerIndex < mNumberOfControls)   // If a timer hasn't already started then start one, If a timer has started, dont start another one!
             { Log.d("onClick", "if (mTimerState.equals(\"STOPPED\") && mActiveTimerIndex < mNumberOfControls)");
                 mTimerState = "STARTED";
-                //highlightTimer(mActiveTimerIndex);
+
+                // Exit function is invalid inputs are present in the timers
+                if (ValidInputsCheck() == false) {
+                    return;
+                }
                 if (mControlsFragments[mActiveTimerIndex].getSwitchState()) {
+
+                    // Configure Count Down Timer variables
                     int hrs = 0;
                     int mins = mControlsFragments[mActiveTimerIndex].getMinutes();
                     int secs = mControlsFragments[mActiveTimerIndex].getSeconds();
 
+                    // Calculate Clock tick speed for metronome
+                    float denominator = mControlsFragments[mActiveTimerIndex].getBpm()/60; // Calculate beats per second by dividing BPM by 60 seconds (60 seconds in 1 minute)
+                    Log.d("onClick", "  Create CountDownTimer denominator = " + denominator);
+                    int tickrate = Math.round( 1000/denominator );  // 1000ms divided by beats per second // Rounded to conver to integer
+
                     // Create CountDownTimer
-                    CreateCountDownTimer( hrs * 3600000 + mins*60000 + secs * 1000 );
+                    CreateCountDownTimer( hrs * 3600000 + mins*60000 + secs * 1000, tickrate);
                 }
                 else // This is when the next timer is not in the queue, i.e. the switch is off, so to pass it to check the next timer we must do the following
                 {
@@ -140,8 +155,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             { Log.d("onClick", "else if (mTimerState.equals(\"PAUSED\"))");
                 mTimerState = "STARTED";
             }
+
+            /*** END OF SEQUENCE ***/
+
             else { // Case where mActiveTimerIndex is now higher than the number of timers, therefore we must be done.
-                mTime.setText("Sequence Complete.");
+                mTime.setText("Finished.");
                 mTime.startAnimation(mFlashingTextAnimation);
                 mFlashingTextAnimation.setDuration(30); //You can manage the blinking time with this parameter
                 mMediaPlayer_End.start();
@@ -150,30 +168,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             break;
 
         case R.id.clear_button: if (logging) Log.d("onClick() ++ed", "case R.id.clear_button");
-            mTimer.cancel();
+            if (mTimer != null)
+                mTimer.cancel();
             mStopButton.setEnabled(false);
             mTimerState = "STOPPED";
 
-            for (int i = 0; i<mNumberOfControls; i++) // too confusing trying to figure out which control to unhighlight, so lets just unhighlight them all
-                unhighlightTimer(i);
-
-            mActiveTimerIndex = 0;
-            mNumberOfExecutedTimers =0;
-            mSkippedTimers = 0;
-
-            mTime.clearAnimation();
-
-            // Stop Annoying End Buzzer, release object, and make a new one so it can play again, if it is still running
-            if (mMediaPlayer_End.isPlaying()) {
-                mMediaPlayer_End.stop();
-                mMediaPlayer_End.release();
-                mMediaPlayer_End = MediaPlayer.create(this, mMediaPlayer_End_SOUNDFILE_ID);
-            }
-            if (mMediaPlayer_Transition.isPlaying()) {
-                mMediaPlayer_End.stop();
-                mMediaPlayer_End.release();
-                mMediaPlayer_End = MediaPlayer.create(this, mMediaPlayer_Transition_SOUNDFILE_ID);
-            }
+            CleanUp();
 
             mStartButton.setEnabled(true); /// re-enable start button
             break;
@@ -185,15 +185,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /*****************************************
      * * *       Helper Functions        * * *
      ****************************************/
-    public void CreateCountDownTimer(int ms)
+
+    private void CleanUp() {
+        for (int i = 0; i<mNumberOfControls; i++) // too confusing trying to figure out which control to unhighlight, so lets just unhighlight them all
+            unhighlightTimer(i);
+
+        mActiveTimerIndex = 0;
+        mNumberOfExecutedTimers =0;
+        mSkippedTimers = 0;
+        mNumActiveTimerSwitches = -1;
+
+        mTime.clearAnimation();
+
+        // Stop Annoying End Buzzer, release object, and make a new one so it can play again, if it is still running
+        if (mMediaPlayer_End.isPlaying()) {
+            mMediaPlayer_End.stop();
+            mMediaPlayer_End.release();
+            mMediaPlayer_End = MediaPlayer.create(this, mMediaPlayer_End_SOUNDFILE_ID);
+        }
+        if (mMediaPlayer_Transition.isPlaying()) {
+            mMediaPlayer_End.stop();
+            mMediaPlayer_End.release();
+            mMediaPlayer_End = MediaPlayer.create(this, mMediaPlayer_Transition_SOUNDFILE_ID);
+        }
+    }
+
+    private boolean ValidInputsCheck()
+    {
+        for (ControlsFragment ctrl : mControlsFragments) {
+            if (ctrl.getBpm() < 60) {
+                Toast.makeText(this, "Error: BPM must be at least 60", Toast.LENGTH_LONG).show();
+                return false;
+            }
+            if (ctrl.getBpm() > 240) {
+                Toast.makeText(this, "Error: BPM must be at most < 240", Toast.LENGTH_LONG).show();
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    public void CreateCountDownTimer(int ms, int Tickrate)
     { if (logging) Log.d("CreateCountDownTimer", "Start");
 
-        highlightTimer(mActiveTimerIndex);
-        if (mActiveTimerIndex > 0){
-            unhighlightTimer(mActiveTimerIndex-1-mSkippedTimers);
+
+        // Timer Highlight Logic
+        if (mPreviousTimerIndex != -1){
+            unhighlightTimer(mPreviousTimerIndex);
             mSkippedTimers = 0; // Reset skipped timers because at this point you've clearly found an active timer
         }
-        mTimer = new CountDownTimer(ms, mTickRate) { // adjust the milli seconds here
+        highlightTimer(mActiveTimerIndex); // highlight active timer
+        mPreviousTimerIndex = mActiveTimerIndex; // unhighlight previously active timer
+
+        mTimer = new CountDownTimer(ms, Tickrate) { // adjust the milli seconds here
             int BPM = mControlsFragments[mActiveTimerIndex].getBpm();
 
             public void onTick(long millisUntilFinished) {
@@ -226,12 +271,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onFinish()
             { if (logging) Log.d("OnFinish()", "CountdownTimer Finished");
 
+                mTime.setText("00:00:00");
                 mNumActiveTimerSwitches--;
 
-                if (mNumActiveTimerSwitches != 0  || mTimerState != "STOPPED")
+                /******** One Final Metronome sound *********/
+                if (BPM!= 0) {    mMediaPlayer_Metronome.start();        }
+
+                if (mNumActiveTimerSwitches != -1) //   || mTimerState != "STOPPED"
                 { if (logging) Log.d("OnFinish()", "if (mNumActiveTimerSwitches != 0)" + "mNumActiveTimerSwitches = " + mNumActiveTimerSwitches);
 
-                    /******** Inter Timer Get Ready SOUND *********/
+                    /******** ::SOUND:: Inter Timer Get Ready SOUND *********/
+
                     if(mUSER_TransitionTimer) {     mMediaPlayer_Transition.start();    }
 
                     while (mMediaPlayer_Transition.isPlaying()) {
@@ -351,6 +401,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {  if (logging) Log.d("MainActivity", "Start: onPause()");
         super.onPause();
+        mStopButton.setEnabled(true);
         this.onClick(mStopButton);
        // mMediaPlayer_Metronome.stop();
        // mMediaPlayer_Transition.stop();

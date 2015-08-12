@@ -3,6 +3,7 @@ package com.joeynelson.timer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,7 @@ public class ControlsFragment extends Fragment {
         mMinutes = (EditText) view.findViewById(R.id.editTextMinutes);
         mSeconds = (EditText) view.findViewById(R.id.editTextSeconds);
         mBPM = (EditText) view.findViewById(R.id.paceText);
+        //mBPM.setFilters(new InputFilter[]{ new InputFilter_MinMax(60, 240)}); /// broken
 
         mLayout = (LinearLayout) view.findViewById(R.id.controlLayout);
         mLayout.setBackgroundColor(Color.LTGRAY);
