@@ -3,15 +3,30 @@
 
     <ListPreference
         android:key="pref_num_of_timers"
+        android:defaultValue="3"
         android:entries="@array/timer_count_options"
         android:entryValues="@array/timer_count_options"
-        android:title="Select the number of timers to use">
+        android:title="Number of Intervals"
+        android:summary="Select between 1 and 10 intervals"
+        >
     </ListPreference>
+    <EditTextPreference
+        android:key="pref_num_of_transition_beeps"
+        android:title="Transition Beeps"
+        android:summary="Specify the number beeps to hear between intervals"
+        android:defaultValue="5"
+        android:inputType="number"
+        android:textSize="@dimen/abc_text_size_small_material"
+        >
+
+    </EditTextPreference>
     <ListPreference
         android:key="pref_expiration_warning_duration"
+        android:defaultValue="2"
         android:entries="@array/expiration_warning_options"
         android:entryValues="@array/expiration_warning_values"
-        android:title="Timer warning flash threshold">
+        android:title="Timer Warning Flash"
+        android:summary="Select the threshold at which the timer begins flashing">
     </ListPreference>
 
 </PreferenceScreen>

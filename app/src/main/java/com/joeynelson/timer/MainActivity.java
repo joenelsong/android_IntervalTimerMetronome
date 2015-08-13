@@ -6,15 +6,11 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,8 +29,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /*** <USER SPECIFIED SETTINGS> ***/
     private SharedPreferences savedValues;
 
-    private static int mNumberOfControls;
-    private static boolean mUSER_TransitionTimer = true;
+    private static int mUSER_NumberOfControls;
+    private static int mUSER_NumberOfTransitionBeeps=0;
     private static int mUSER_TimerExpirationWarning;
 
     // clean up
@@ -52,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected int mPreviousTimerIndex=-1;
     private ControlsFragment[] mControlsFragments;
 
+    protected int mTickCount;
+
     // Timer Helper Variables and Index Trackers
     private static final String FORMAT = "%02d:%02d:%02d"; // Format to output time for clock
     protected int mNumActiveTimerSwitches = -1; // Number of Switches turned on ( Calculated after the start button is pressed )
@@ -64,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected int mMediaPlayer_Metronome_SOUNDFILE_ID = R.raw.weakpulse_20ms;
 
     protected MediaPlayer mMediaPlayer_Transition;
-    protected int mMediaPlayer_Transition_SOUNDFILE_ID = R.raw.getready_knivesharpen;
+    protected int mMediaPlayer_Transition_SOUNDFILE_ID = R.raw.transition_beep;
 
     protected MediaPlayer mMediaPlayer_End;
     protected int mMediaPlayer_End_SOUNDFILE_ID = R.raw.timer_end_buzzer;
@@ -101,10 +99,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Poll Number of Active Timers, Used to determine how long the sequence should be, so we know when to sound the final buzzer
         if (mNumActiveTimerSwitches == -1)  // Only needs to be run if mNumActiveTimerSwitches has not already ben set, otherwise it grows each itteration
         {
-            for (int i = 0; i < mNumberOfControls; i++) {
+            for (int i = 0; i < mUSER_NumberOfControls; i++) {
                 if (mControlsFragments[i].getSwitchState()) {
                     if (logging)
-                        Log.d("onClick", "if (mControlsFragments[i].getSwitchState())" + " getSwitchState(" + i + ") = " + mControlsFragments[i].getSwitchState());
+                        //Log.d("onClick", "if (mControlsFragments[i].getSwitchState())" + " getSwitchState(" + i + ") = " + mControlsFragments[i].getSwitchState());
                     mNumActiveTimerSwitches++;
                 }
 
@@ -116,8 +114,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mStartButton.setEnabled(false);
             mStopButton.setEnabled(true); // Enable Stop Button
 
-            if (mTimerState.equals("STOPPED") && mActiveTimerIndex < mNumberOfControls)   // If a timer hasn't already started then start one, If a timer has started, dont start another one!
-            { Log.d("onClick", "if (mTimerState.equals(\"STOPPED\") && mActiveTimerIndex < mNumberOfControls)");
+            if (mTimerState.equals("STOPPED") && mActiveTimerIndex < mUSER_NumberOfControls)   // If a timer hasn't already started then start one, If a timer has started, dont start another one!
+            { Log.d("onClick", "if (mTimerState.equals(\"STOPPED\") && mActiveTimerIndex < mUSER_NumberOfControls)");
                 mTimerState = "STARTED";
 
                 // Exit function is invalid inputs are present in the timers
@@ -132,12 +130,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     int secs = mControlsFragments[mActiveTimerIndex].getSeconds();
 
                     // Calculate Clock tick speed for metronome
-                    float denominator = mControlsFragments[mActiveTimerIndex].getBpm()/60; // Calculate beats per second by dividing BPM by 60 seconds (60 seconds in 1 minute)
-                    Log.d("onClick", "  Create CountDownTimer denominator = " + denominator);
-                    int tickrate = Math.round( 1000/denominator );  // 1000ms divided by beats per second // Rounded to conver to integer
+
+                    int bps = mControlsFragments[mActiveTimerIndex].getBpm()/15; // beats per second @ enhanced speed (that is why it's 15)
+                    int tickRate = Math.round( 1000/bps );  // 1000ms divided by beats per second // Rounded to conver to integer
+
+                    Log.d("onClick", "  Create CountDownTimer realTickRate = " + tickRate);
 
                     // Create CountDownTimer
-                    CreateCountDownTimer( hrs * 3600000 + mins*60000 + secs * 1000, tickrate);
+                    CreateCountDownTimer(hrs * 3600000 + mins * 60000 + secs * 1000, tickRate);
                 }
                 else // This is when the next timer is not in the queue, i.e. the switch is off, so to pass it to check the next timer we must do the following
                 {
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      ****************************************/
 
     private void CleanUp() {
-        for (int i = 0; i<mNumberOfControls; i++) // too confusing trying to figure out which control to unhighlight, so lets just unhighlight them all
+        for (int i = 0; i< mUSER_NumberOfControls; i++) // too confusing trying to figure out which control to unhighlight, so lets just unhighlight them all
             unhighlightTimer(i);
 
         mActiveTimerIndex = 0;
@@ -210,26 +210,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private boolean ValidInputsCheck()
+    private boolean ValidInputsCheck() // run any form field validation checks here
     {
         for (ControlsFragment ctrl : mControlsFragments) {
-            if (ctrl.getBpm() < 60) {
-                Toast.makeText(this, "Error: BPM must be at least 60", Toast.LENGTH_LONG).show();
+            if (ctrl.getBpm() < 15 && ctrl.getBpm()!=0) {
+                Toast.makeText(this, "Error: BPM must be at least 15 or 0 to disable sound", Toast.LENGTH_LONG).show();
                 return false;
             }
-            if (ctrl.getBpm() > 240) {
-                Toast.makeText(this, "Error: BPM must be at most < 240", Toast.LENGTH_LONG).show();
+            if (ctrl.getBpm() > 360) {
+                Toast.makeText(this, "Error: BPM must be at most < 360", Toast.LENGTH_LONG).show();
                 return false;
             }
         }
         return true;
     }
 
-
+/*** Create the Countdown Timer ***/
     public void CreateCountDownTimer(int ms, int Tickrate)
     { if (logging) Log.d("CreateCountDownTimer", "Start");
-
-
+        
         // Timer Highlight Logic
         if (mPreviousTimerIndex != -1){
             unhighlightTimer(mPreviousTimerIndex);
@@ -240,15 +239,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mTimer = new CountDownTimer(ms, Tickrate) { // adjust the milli seconds here
             int BPM = mControlsFragments[mActiveTimerIndex].getBpm();
+            int TickCount = 0;
+
 
             public void onTick(long millisUntilFinished) {
 
                 if(mTimerState.equals("STARTED")) {
+
                     /******** METRONOME SOUND *********/
                     if (BPM!= 0) {
-                        //mMediaPlayer_Metronome.release();
-                        mMediaPlayer_Metronome.start();
+                        if (TickCount%4 ==0) {
+                            //mMediaPlayer_Metronome.release();
+                            mMediaPlayer_Metronome.start();
+                        }
                     }
+
 
                     mTime.setText("" + String.format(FORMAT,
                             TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
@@ -263,8 +268,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mTimer.cancel();
                     }
                     if (millisUntilFinished <= mUSER_TimerExpirationWarning) {  // 5 second visual flash warning that the timer is about to expire
+                        if (mFlashingTextAnimation.hasEnded() || !mFlashingTextAnimation.hasStarted())
                         mTime.startAnimation(mFlashingTextAnimation);
+                        if (logging) Log.d("CreateCountDownTimer", "if (mFlashingTextAnimation.hasEnded() || !mFlashingTextAnimation.hasStarted()) = " + (mFlashingTextAnimation.hasEnded() || !mFlashingTextAnimation.hasStarted()));
                     }
+                    TickCount++;
                 }
             }
 
@@ -273,6 +281,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 mTime.setText("00:00:00");
                 mNumActiveTimerSwitches--;
+                mTime.clearAnimation(); // stops flashing text if it is taking place
+
 
                 /******** One Final Metronome sound *********/
                 if (BPM!= 0) {    mMediaPlayer_Metronome.start();        }
@@ -282,11 +292,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     /******** ::SOUND:: Inter Timer Get Ready SOUND *********/
 
-                    if(mUSER_TransitionTimer) {     mMediaPlayer_Transition.start();    }
-
-                    while (mMediaPlayer_Transition.isPlaying()) {
-
+                    for(int i = 0; i < mUSER_NumberOfTransitionBeeps; i++) {
+                        mMediaPlayer_Transition.start();
+                        while (mMediaPlayer_Transition.isPlaying()) { // Stall for audio play loop
+                        }
                     }
+
+
                 }
                     mTimerState = "STOPPED";
                     mActiveTimerIndex = mActiveTimerIndex + 1;
@@ -304,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void endhighlightTimer(int x)    {        mControlsFragments[x].setLayoutColor(Color.RED);    }
 
-    public void setNewActiveTimerIndex(int x)   { mActiveTimerIndex=+1%mNumberOfControls; }
+    public void setNewActiveTimerIndex(int x)   { mActiveTimerIndex=+1% mUSER_NumberOfControls; }
 
 
 
@@ -337,13 +349,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override protected void onResume()
     {   if (logging) Log.d("MainActivity", "Start: OnResume()");
+        System.out.println(mActiveTimerIndex);
         super.onResume();
         /* ************************************************************** *
         *                       Load User Settings                        *
         * *************************************************************** */
 
-        // number of timer controls
-        mNumberOfControls = Integer.parseInt(savedValues.getString("pref_num_of_timers", "5"));
+        mUSER_NumberOfControls = Integer.parseInt(savedValues.getString("pref_num_of_timers", "3"));
+        mUSER_NumberOfTransitionBeeps = Integer.parseInt(savedValues.getString("pref_num_of_transition_beeps", "5"));
         mUSER_TimerExpirationWarning = Integer.parseInt(savedValues.getString("pref_expiration_warning_duration", "10000"));
 
 
@@ -374,12 +387,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
 
-
             /***************************************************************************************
              *    Dynamically create fragments based on number of controls specified by the user    *
              **************************************************************************************/
-            for (int i = 0; i < mNumberOfControls; i++) {
-                tag = "cfrag"+i;
+            for (int i = 0; i < mUSER_NumberOfControls; i++) {
+                tag = "cfrag" + i;
                 ctrlfrag = new ControlsFragment();
                 fragTran.add(R.id.fragment_container, ctrlfrag, tag);
             }
@@ -388,8 +400,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             fragMan.executePendingTransactions();
 
             // Populate Fragments Array to reference fragments that were just created
-            mControlsFragments = new ControlsFragment[mNumberOfControls];
-            for (int b = 0; b < mNumberOfControls; b++) {
+            mControlsFragments = new ControlsFragment[mUSER_NumberOfControls];
+            for (int b = 0; b < mUSER_NumberOfControls; b++) {
                 tag = "cfrag"+b;
                 mControlsFragments[b] = (ControlsFragment) getSupportFragmentManager().findFragmentByTag(tag); //if (logging) Log.d("ClockFragment", "OnClick = " + cFrag);
             }
@@ -401,8 +413,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {  if (logging) Log.d("MainActivity", "Start: onPause()");
         super.onPause();
-        mStopButton.setEnabled(true);
-        this.onClick(mStopButton);
+       // mStopButton.setEnabled(true);
+        //this.onClick(mStopButton);
        // mMediaPlayer_Metronome.stop();
        // mMediaPlayer_Transition.stop();
        // mMediaPlayer_End.stop();
