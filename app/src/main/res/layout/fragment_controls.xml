@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/rythmspinner1"
         android:layout_weight=".45"
-        android:entries="@array/time_signatures"
+        android:entries="@array/time_signature_numerator"
         android:textSize="24dp"/>
 
     <TextView
@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/rythmspinner2"
         android:layout_weight=".45"
-        android:entries="@array/time_signatures"
+        android:entries="@array/time_signature_denominator"
         android:textSize="24dp" />
 
 </LinearLayout>

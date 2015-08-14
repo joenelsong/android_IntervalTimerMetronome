@@ -25,16 +25,18 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {   private boolean logging = true;
+    protected boolean FirstLaunch = true;
+    private int MAX_NUMBER_OF_CONTROLS = 10;  // used for clean up
+    private int ON_RESUME_COUNT =2;
 
-    /*** <USER SPECIFIED SETTINGS> ***/
+    /*** <GLOBAL USER SETTINGS> ***/
     private SharedPreferences savedValues;
 
-    private static int mUSER_NumberOfControls;
-    private static int mUSER_NumberOfTransitionBeeps=0;
-    private static int mUSER_TimerExpirationWarning;
+    private  int mUSER_NumberOfControls;
+    private  int mUSER_NumberOfTransitionBeeps;
+    private  boolean mUSER_FirstBeatAccent;
+    private  int mUSER_TimerExpirationWarning;
 
-    // clean up
-    private int mCleanUpFragmentCount = 0;
 
     //~// Widgets //~//
     private Button mStartButton;
@@ -48,7 +50,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected int mPreviousTimerIndex=-1;
     private ControlsFragment[] mControlsFragments;
 
-    protected int mTickCount;
+    // Time Signature Variables
+    protected int mTimeSignatureNumerator;
+    protected int mTimeSignatureDenominator;
+
 
     // Timer Helper Variables and Index Trackers
     private static final String FORMAT = "%02d:%02d:%02d"; // Format to output time for clock
@@ -60,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // Media Player Objects and there sound files //
     protected MediaPlayer mMediaPlayer_Metronome;
     protected int mMediaPlayer_Metronome_SOUNDFILE_ID = R.raw.weakpulse_20ms;
+
+    protected MediaPlayer mMediaPlayer_MetronomeAccent;
+    protected int mMediaPlayer_MetronomeAccent_SOUNDFILE_ID = R.raw.druminfected__metronome;
 
     protected MediaPlayer mMediaPlayer_Transition;
     protected int mMediaPlayer_Transition_SOUNDFILE_ID = R.raw.transition_beep;
@@ -135,6 +143,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     int tickRate = Math.round( 1000/bps );  // 1000ms divided by beats per second // Rounded to conver to integer
 
                     Log.d("onClick", "  Create CountDownTimer realTickRate = " + tickRate);
+
+                    // Configure Time Signature Settings
+                    mTimeSignatureNumerator=mControlsFragments[mActiveTimerIndex].getTimeSignatureNumerator();
+                    mTimeSignatureDenominator=mControlsFragments[mActiveTimerIndex].getTimeSignatureDenominator();
+                    if (mTimeSignatureDenominator == 8) { // @X Temp if Time Signature is using 8th notes instead of 4th notes.
+                        tickRate = tickRate / 2;
+                    }
 
                     // Create CountDownTimer
                     CreateCountDownTimer(hrs * 3600000 + mins * 60000 + secs * 1000, tickRate);
@@ -217,8 +232,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, "Error: BPM must be at least 15 or 0 to disable sound", Toast.LENGTH_LONG).show();
                 return false;
             }
-            if (ctrl.getBpm() > 360) {
-                Toast.makeText(this, "Error: BPM must be at most < 360", Toast.LENGTH_LONG).show();
+            if (ctrl.getBpm() > 240) {
+                Toast.makeText(this, "Error: BPM must be at most 240", Toast.LENGTH_LONG).show();
                 return false;
             }
         }
@@ -228,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 /*** Create the Countdown Timer ***/
     public void CreateCountDownTimer(int ms, int Tickrate)
     { if (logging) Log.d("CreateCountDownTimer", "Start");
-        
+
         // Timer Highlight Logic
         if (mPreviousTimerIndex != -1){
             unhighlightTimer(mPreviousTimerIndex);
@@ -249,8 +264,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     /******** METRONOME SOUND *********/
                     if (BPM!= 0) {
                         if (TickCount%4 ==0) {
-                            //mMediaPlayer_Metronome.release();
-                            mMediaPlayer_Metronome.start();
+                            if ( ( (TickCount/4) % mTimeSignatureNumerator == 0) && mUSER_FirstBeatAccent)
+                                mMediaPlayer_MetronomeAccent.start();
+                            else
+                                mMediaPlayer_Metronome.start();
                         }
                     }
 
@@ -284,8 +301,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mTime.clearAnimation(); // stops flashing text if it is taking place
 
 
-                /******** One Final Metronome sound *********/
-                if (BPM!= 0) {    mMediaPlayer_Metronome.start();        }
+                /********ONE LAST METRONOME SOUND *********/
+                if (BPM!= 0) {
+                    if (TickCount%4 ==0) {
+                        if ( ( (TickCount/4) % mTimeSignatureNumerator == 0) && mUSER_FirstBeatAccent)
+                            mMediaPlayer_MetronomeAccent.start();
+                        else
+                            mMediaPlayer_Metronome.start();
+                    }
+                }
 
                 if (mNumActiveTimerSwitches != -1) //   || mTimerState != "STOPPED"
                 { if (logging) Log.d("OnFinish()", "if (mNumActiveTimerSwitches != 0)" + "mNumActiveTimerSwitches = " + mNumActiveTimerSwitches);
@@ -298,7 +322,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
 
-
                 }
                     mTimerState = "STOPPED";
                     mActiveTimerIndex = mActiveTimerIndex + 1;
@@ -306,10 +329,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         }.start();
-        /******** BEEP SOUND *********/ // Beep onces right away
-        if (mControlsFragments[mActiveTimerIndex].getBpm() != 0) {  mMediaPlayer_Metronome.start();  }
-
     }
+
+
     public void highlightTimer(int x)    {        mControlsFragments[x].setLayoutColor(Color.GREEN);    }
 
     public void unhighlightTimer(int x)    {        mControlsFragments[x].setLayoutColor(Color.LTGRAY);    }
@@ -340,7 +362,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         }
         else if (id== R.id.action_about) {
-            Toast.makeText(this, "Ispiration for this timer comes from various interval training activities with Sigung Colin Davey of Colin Davey Combat Arts", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Inspiration for this timer comes from various interval training activities with Sigung Colin Davey of Colin Davey Combat Arts", Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -366,48 +388,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             /*** Create Media Players ***/;
             mMediaPlayer_Metronome = MediaPlayer.create(this, mMediaPlayer_Metronome_SOUNDFILE_ID);
+            mMediaPlayer_MetronomeAccent = MediaPlayer.create(this, mMediaPlayer_MetronomeAccent_SOUNDFILE_ID);
             mMediaPlayer_Transition = MediaPlayer.create(this, mMediaPlayer_Transition_SOUNDFILE_ID);
             mMediaPlayer_End= MediaPlayer.create(this, mMediaPlayer_End_SOUNDFILE_ID);
 
             String tag = "";
             ControlsFragment ctrlfrag;
 
-            FragmentManager fragMan = getSupportFragmentManager();
-            FragmentTransaction fragTran = fragMan.beginTransaction();
-
-
         /*******************************************************************************************
         *     Clean up old fragments if user uses settings and therefore calls onResume() again    *
         *******************************************************************************************/
-            for (int i = 0; i < mCleanUpFragmentCount; i++) {
+
+            FragmentManager fragManRemove = getSupportFragmentManager();
+            FragmentTransaction fragTranRemove = fragManRemove.beginTransaction();
+
+            for (int i = 0; i < MAX_NUMBER_OF_CONTROLS; i++) {
                 tag = "cfrag"+i;
-                ControlsFragment oldFragment = (ControlsFragment) getSupportFragmentManager().findFragmentByTag(tag);
+                ControlsFragment oldFragment = (ControlsFragment) fragManRemove.findFragmentByTag(tag);
                 if(oldFragment != null) {
-                    getSupportFragmentManager().beginTransaction().remove(oldFragment).commit();
+                    fragTranRemove.remove(oldFragment);
                 }
             }
+
+            fragTranRemove.commit(); // commit additions
+            fragManRemove.executePendingTransactions();
 
             /***************************************************************************************
              *    Dynamically create fragments based on number of controls specified by the user    *
              **************************************************************************************/
+
+            FragmentManager fragManAdd = getSupportFragmentManager();
+            FragmentTransaction fragTranAdd = fragManAdd.beginTransaction();
+
             for (int i = 0; i < mUSER_NumberOfControls; i++) {
                 tag = "cfrag" + i;
                 ctrlfrag = new ControlsFragment();
-                fragTran.add(R.id.fragment_container, ctrlfrag, tag);
+                fragTranAdd.add(R.id.fragment_container, ctrlfrag, tag);
             }
 
-            fragTran.commit(); // commit additions
-            fragMan.executePendingTransactions();
+            fragTranAdd.commit(); // commit additions
+            fragManAdd.executePendingTransactions();
 
             // Populate Fragments Array to reference fragments that were just created
             mControlsFragments = new ControlsFragment[mUSER_NumberOfControls];
             for (int b = 0; b < mUSER_NumberOfControls; b++) {
-                tag = "cfrag"+b;
+                if (ON_RESUME_COUNT%2 == 0) // This fixes a bug in android/java code where the fragments can get reversed: http://stackoverflow.com/questions/23504790/android-multiple-fragment-transaction-ordering/23523922#23523922
+                    tag = "cfrag"+(b);
+                else
+                    tag = "cfrag"+(mUSER_NumberOfControls-b-1);
                 mControlsFragments[b] = (ControlsFragment) getSupportFragmentManager().findFragmentByTag(tag); //if (logging) Log.d("ClockFragment", "OnClick = " + cFrag);
             }
-            mCleanUpFragmentCount = mControlsFragments.length;
-
         }
+        ON_RESUME_COUNT++;
     }
 
     @Override

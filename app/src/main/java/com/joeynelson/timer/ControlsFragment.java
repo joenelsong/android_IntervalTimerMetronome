@@ -32,9 +32,9 @@ public class ControlsFragment extends Fragment {
     public int getMinutes() {   return Integer.parseInt(mMinutes.getText().toString());    }
     public int getSeconds() {   return Integer.parseInt(mSeconds.getText().toString());    }
     public int getBpm() {   return Integer.parseInt(mBPM.getText().toString());    }
+    public int getTimeSignatureNumerator() {    return Integer.parseInt(mTimeSigNum.getSelectedItem().toString());    }
+    public int getTimeSignatureDenominator() {    return Integer.parseInt(mTimeSigDen.getSelectedItem().toString());    }
 
-    public Spinner getSpinner1() { return mTimeSigNum; }
-    public Spinner getSpinner2() { return mTimeSigDen; }
     public void setSpinner1(int x) { mTimeSigNum.setSelection(x); }
     public void setSpinner2(int x) { mTimeSigDen.setSelection(x); }
     public void setLayoutColor(int c) { mLayout.setBackgroundColor(c);}
@@ -49,8 +49,8 @@ public class ControlsFragment extends Fragment {
 
         mTimeSigNum = (Spinner) view.findViewById(R.id.rythmspinner1); //Log.d("ControlsFragment", "sp =" + mTimeSigNum);
         mTimeSigDen = (Spinner) view.findViewById(R.id.rythmspinner2);
-        this.setSpinner1(3); // Set Spinner Default Values
-        this.setSpinner2(3); // Set Spinner Default Values
+        this.setSpinner1(2); // Set Spinner Default Values
+        this.setSpinner2(0); // Set Spinner Default Values
 
         mMinutes = (EditText) view.findViewById(R.id.editTextMinutes);
         mSeconds = (EditText) view.findViewById(R.id.editTextSeconds);

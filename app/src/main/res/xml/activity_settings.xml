@@ -3,7 +3,7 @@
 
     <ListPreference
         android:key="pref_num_of_timers"
-        android:defaultValue="3"
+        android:defaultValue="4"
         android:entries="@array/timer_count_options"
         android:entryValues="@array/timer_count_options"
         android:title="Number of Intervals"
@@ -14,19 +14,30 @@
         android:key="pref_num_of_transition_beeps"
         android:title="Transition Beeps"
         android:summary="Specify the number beeps to hear between intervals"
-        android:defaultValue="5"
+        android:defaultValue="3"
         android:inputType="number"
         android:textSize="@dimen/abc_text_size_small_material"
         >
-
     </EditTextPreference>
+
+    <CheckBoxPreference
+        android:key="pref_first_beat_accent"
+        android:defaultValue="true"
+        android:title="First Beat Accent"
+        android:summaryOn="Accent is currently turned on"
+        android:summaryOff="Accent is currently turned off"
+        >
+    </CheckBoxPreference>
+
     <ListPreference
         android:key="pref_expiration_warning_duration"
         android:defaultValue="2"
         android:entries="@array/expiration_warning_options"
         android:entryValues="@array/expiration_warning_values"
         android:title="Timer Warning Flash"
-        android:summary="Select the threshold at which the timer begins flashing">
+        android:summary="Select the threshold at which the timer begins flashing before it expires"
+        >
     </ListPreference>
+
 
 </PreferenceScreen>
