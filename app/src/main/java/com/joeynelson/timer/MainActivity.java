@@ -32,7 +32,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /*** <GLOBAL USER SETTINGS> ***/
     private SharedPreferences savedValues;
 
-    private  int mUSER_NumberOfControls;
+    private  int mUSER_NumberOfControls = 0; // intialized to work with lastNumberOfControls logic
+    private int lastNumberOfControls;
     private  int mUSER_NumberOfTransitionBeeps;
     private  boolean mUSER_FirstBeatAccent;
     private  int mUSER_TimerExpirationWarning;
@@ -362,7 +363,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         }
         else if (id== R.id.action_about) {
-            Toast.makeText(this, "Inspiration for this timer comes from various interval training activities with Sigung Colin Davey of Colin Davey Combat Arts", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Inspiration for this timer comes from various interval training activities with Sigung Colin Davey of Colin Davey Combat Arts", Toast.LENGTH_LONG).show();
             return true;
         }
 
@@ -377,9 +378,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         *                       Load User Settings                        *
         * *************************************************************** */
 
+        lastNumberOfControls = mUSER_NumberOfControls;
+
         mUSER_NumberOfControls = Integer.parseInt(savedValues.getString("pref_num_of_timers", "3"));
         mUSER_NumberOfTransitionBeeps = Integer.parseInt(savedValues.getString("pref_num_of_transition_beeps", "5"));
         mUSER_TimerExpirationWarning = Integer.parseInt(savedValues.getString("pref_expiration_warning_duration", "10000"));
+        mUSER_FirstBeatAccent = savedValues.getBoolean("pref_first_beat_accent", true);
 
 
         // Check that the activity is using the layout version with
@@ -395,51 +399,71 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String tag = "";
             ControlsFragment ctrlfrag;
 
-        /*******************************************************************************************
-        *     Clean up old fragments if user uses settings and therefore calls onResume() again    *
-        *******************************************************************************************/
 
-            FragmentManager fragManRemove = getSupportFragmentManager();
-            FragmentTransaction fragTranRemove = fragManRemove.beginTransaction();
 
-            for (int i = 0; i < MAX_NUMBER_OF_CONTROLS; i++) {
-                tag = "cfrag"+i;
-                ControlsFragment oldFragment = (ControlsFragment) fragManRemove.findFragmentByTag(tag);
-                if(oldFragment != null) {
-                    fragTranRemove.remove(oldFragment);
+
+            int diff = lastNumberOfControls - mUSER_NumberOfControls; // calculate number of controls to remove
+
+
+            /*******************************************************************************************
+             *     Clean up old fragments if user uses settings and therefore calls onResume() again    *
+             *******************************************************************************************/
+
+            if (mUSER_NumberOfControls < lastNumberOfControls) { // Clean up old fragments only if the user is asking for less fragments than before
+                FragmentManager fragManRemove = getSupportFragmentManager();
+                FragmentTransaction fragTranRemove = fragManRemove.beginTransaction();
+
+
+                for (int i = diff; i < lastNumberOfControls; i++) {
+                    tag = "cfrag" + i;
+                    ControlsFragment oldFragment = (ControlsFragment) fragManRemove.findFragmentByTag(tag);
+                    if (oldFragment != null) {
+                        fragTranRemove.remove(oldFragment);
+                    }
                 }
+
+                fragTranRemove.commit(); // commit additions
+                fragManRemove.executePendingTransactions();
+
             }
 
-            fragTranRemove.commit(); // commit additions
-            fragManRemove.executePendingTransactions();
 
             /***************************************************************************************
              *    Dynamically create fragments based on number of controls specified by the user    *
              **************************************************************************************/
+            if (mUSER_NumberOfControls > lastNumberOfControls) {
 
-            FragmentManager fragManAdd = getSupportFragmentManager();
-            FragmentTransaction fragTranAdd = fragManAdd.beginTransaction();
+                int inversediff = diff-(2*diff);
+                System.out.println("INVERSEDIFF = " + inversediff);
 
-            for (int i = 0; i < mUSER_NumberOfControls; i++) {
-                tag = "cfrag" + i;
-                ctrlfrag = new ControlsFragment();
-                fragTranAdd.add(R.id.fragment_container, ctrlfrag, tag);
-            }
+                FragmentManager fragManAdd = getSupportFragmentManager();
+                FragmentTransaction fragTranAdd = fragManAdd.beginTransaction();
 
-            fragTranAdd.commit(); // commit additions
-            fragManAdd.executePendingTransactions();
+                for (int i = lastNumberOfControls; i < mUSER_NumberOfControls; i++) {
+                    tag = "cfrag" + i;
+                    ctrlfrag = new ControlsFragment();
+                    fragTranAdd.add(R.id.fragment_container, ctrlfrag, tag);
+                }
 
-            // Populate Fragments Array to reference fragments that were just created
-            mControlsFragments = new ControlsFragment[mUSER_NumberOfControls];
-            for (int b = 0; b < mUSER_NumberOfControls; b++) {
-                if (ON_RESUME_COUNT%2 == 0) // This fixes a bug in android/java code where the fragments can get reversed: http://stackoverflow.com/questions/23504790/android-multiple-fragment-transaction-ordering/23523922#23523922
-                    tag = "cfrag"+(b);
-                else
-                    tag = "cfrag"+(mUSER_NumberOfControls-b-1);
-                mControlsFragments[b] = (ControlsFragment) getSupportFragmentManager().findFragmentByTag(tag); //if (logging) Log.d("ClockFragment", "OnClick = " + cFrag);
+                fragTranAdd.commit(); // commit additions
+                fragManAdd.executePendingTransactions();
+
+                //if (mUSER_NumberOfControls < lastNumberOfControls && ON_RESUME_COUNT != 2)
+                    //ON_RESUME_COUNT++;
+
+                // Populate Fragments Array to reference fragments that were just created
+                mControlsFragments = new ControlsFragment[mUSER_NumberOfControls];
+                for (int b = 0; b < mUSER_NumberOfControls; b++) {
+                    //if (ON_RESUME_COUNT % 2 == 0 || ON_RESUME_COUNT == 2) // This tries to fix a bug in android/java code where the fragments can get reversed: http://stackoverflow.com/questions/23504790/android-multiple-fragment-transaction-ordering/23523922#23523922
+                        tag = "cfrag" + (b);
+                    //else
+                        //tag = "cfrag" + (mUSER_NumberOfControls - b - 1);
+                    mControlsFragments[b] = (ControlsFragment) getSupportFragmentManager().findFragmentByTag(tag); //if (logging) Log.d("ClockFragment", "OnClick = " + cFrag);
+                }
             }
         }
         ON_RESUME_COUNT++;
+
     }
 
     @Override

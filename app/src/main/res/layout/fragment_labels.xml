@@ -12,43 +12,50 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Queue"
+            android:textSize="14dp"
             android:id="@+id/textView3"
-            android:layout_weight="1"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp" />
+            android:layout_weight=".55"
+            android:layout_marginLeft="5dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Min"
+            android:text=" Min"
+            android:textSize="16dp"
             android:id="@+id/textViewMin"
-            android:layout_weight="1" />
+            android:layout_weight=".525"
+            android:layout_marginLeft="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Sec"
+        android:text=" Sec"
+        android:textSize="16dp"
         android:id="@+id/textViewSec"
-        android:layout_weight="1"
-        android:layout_marginLeft="10dp" />
+        android:layout_weight=".535"
+        android:layout_marginLeft="22dp"
+        android:layout_marginRight="5dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Bpm"
+            android:text="  BPM"
+            android:textSize="16dp"
             android:id="@+id/textView"
-            android:layout_weight="1"
-            android:layout_marginLeft="10dp" />
+            android:layout_weight=".5"
+            android:layout_marginLeft="15dp" />
 
-        <TextView
+    <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Time Signature"
+            android:textSize="14dp"
             android:id="@+id/textView9"
-            android:layout_weight="1" />
+            android:layout_weight=".98"
+        android:layout_marginLeft="15dp" />
 
-    </LinearLayout>
+</LinearLayout>
