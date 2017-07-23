@@ -1,7 +1,11 @@
 <resources>
-    <string name="app_name">IntervalTimer</string>
+    <string name="load_screen_label"> Interval Timer Metronome</string>
+    <string name="app_name">Interval Timer Metronome</string>
     <string name="start_button">Start</string>
     <string name="stop_button">Stop</string>
     <string name="reset_button">Reset</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Setting:</string>
+
+    <string name="banner_ad_unit_id">ca-app-pub-7476205683467369/3364095531</string>
+
 </resources>

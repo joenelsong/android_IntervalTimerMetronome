@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="time_signatures">
-        <item>1</item>
+    <string-array name="time_signature_numerator">
         <item>2</item>
         <item>3</item>
         <item>4</item>
         <item>5</item>
         <item>6</item>
         <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+
+    <string-array name="time_signature_denominator">
+        <item>4</item>
         <item>8</item>
     </string-array>
 
@@ -20,8 +28,6 @@
         <item>6</item>
         <item>7</item>
         <item>8</item>
-        <item>9</item>
-        <item>10</item>
     </string-array>
 
     <string-array name="expiration_warning_options">
@@ -44,6 +50,10 @@
         <item>30000</item>
         <item>45000</item>
         <item>60000</item>
+    </string-array>
+
+    <string-array name="saved_timers">
+        <item>New</item>
     </string-array>
 
 </resources>

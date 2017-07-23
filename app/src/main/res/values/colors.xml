@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Green -->
+    <color name="green_temp">#23A96E</color>
+    <color name="green_dark">#159204</color>
+    <color name="bright_green">#02D8B0</color>
+    <color name="button_green">#10a54a</color>
+    <color name="startbutton_on">#34C239</color>
+    <color name="startbutton_off">#195C1B</color>
+    <color name="stopbutton_on">#C71616</color>
+    <color name="stopbutton_off">#5E0A0A</color>
+
+    <color name="forground1">#1EAB9D</color>
+    <color name="accentFromTheme"> #80cbc4 </color>
+    <color name="background1">#444444</color>
+    <color name="background2">#888888</color>
+
+</resources>
