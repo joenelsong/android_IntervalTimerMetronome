@@ -1,20 +1,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+
+    android:layout_marginBottom = "@dimen/activity_vertical_margin"
+    android:layout_marginTop = "@dimen/activity_vertical_margin"
+    android:layout_marginLeft = "@dimen/activity_horizontal_margin"
+    android:layout_marginRight = "@dimen/activity_horizontal_margin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    tools:context=".MainActivity">
 
     <!-- fragment name points to class FirstFragment -->
     <fragment android:name = "com.joeynelson.timer.ClockFragment"
         android:id="@+id/clock_fragment"
-        android:layout_weight="2"
+        android:layout_weight="2.25"
         android:layout_width="match_parent"
-        android:layout_height="0dp" />
+        android:layout_height="0dp"
+        android:layout_marginBottom="5dip"/>
     <fragment android:name= "com.joeynelson.timer.Labels"
         android:id="@+id/labels_fragment"
-        android:layout_weight=".7"
+        android:layout_weight=".5"
         android:layout_width="match_parent"
         android:layout_height="0dp" />
 
@@ -23,13 +29,50 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6">
+        android:layout_weight="7.25">
 
     </LinearLayout>
+
+    <Button
+        android:text="Save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/save_button"
+        android:layout_weight=".35"/>
+    <!--
+        <com.google.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            ads:adUnitId="@string/banner_ad_unit_id"
+            ads:adSize="BANNER"
+            >
+        </com.google.ads.AdView>
+    -->
+
+
 
 
 </LinearLayout>
 <!--
+
+
+
+<com.google.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        ads:adUnitId="ca-app-pub-7476205683467369/3364095531"
+        ads:adSize="BANNER"
+        ads:testDevices="TEST_EMULATOR"
+        ads:loadAdOnCreate = "true"
+        >
+
+    </com.google.ads.AdView>
+
+
+
+
  <fragment android:name= "com.joeynelson.timer.ControlsFragment"
         android:id="@+id/controls_fragment1"
         android:layout_weight="1"

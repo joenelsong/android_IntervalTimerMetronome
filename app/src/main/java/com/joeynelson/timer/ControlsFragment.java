@@ -8,15 +8,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.graphics.Color;
 import android.widget.Switch;
+import android.widget.TextView;
+
+import java.util.Collections;
+
+import static android.R.id.list;
 
 public class ControlsFragment extends Fragment {
 
-    private boolean logging = true;
+    private boolean logging = false;
     private boolean twoPaneLayout;
 
     private Switch mSwitch;
@@ -29,15 +35,35 @@ public class ControlsFragment extends Fragment {
 
 
     public boolean getSwitchState() {   return mSwitch.isChecked();}
-    public int getMinutes() {   return Integer.parseInt(mMinutes.getText().toString());    }
-    public int getSeconds() {   return Integer.parseInt(mSeconds.getText().toString());    }
-    public int getBpm() {   return Integer.parseInt(mBPM.getText().toString());    }
+    public int getMinutes() {
+        String value =  mMinutes.getText().toString();
+        if (value.length() > 0 )
+            return Integer.parseInt(value);
+        else
+            return 0;}
+    public int getSeconds() {
+        String value =  mSeconds.getText().toString();
+        if (value.length() > 0 )
+            return Integer.parseInt(value);
+        else
+            return 0;}
+    public int getBpm() {   String value =  mBPM.getText().toString();
+        if (value.length() > 0 )
+            return Integer.parseInt(value);
+        else
+            return 0;  }
     public int getTimeSignatureNumerator() {    return Integer.parseInt(mTimeSigNum.getSelectedItem().toString());    }
     public int getTimeSignatureDenominator() {    return Integer.parseInt(mTimeSigDen.getSelectedItem().toString());    }
 
     public void setSpinner1(int x) { mTimeSigNum.setSelection(x); }
-    public void setSpinner2(int x) { mTimeSigDen.setSelection(x); }
+    public void setSpinner2(int x) { mTimeSigDen.setSelection(x) ;}
     public void setLayoutColor(int c) { mLayout.setBackgroundColor(c);}
+    public void setTextSize(float ts) {
+        mMinutes.setTextSize(ts);
+        mSeconds.setTextSize(ts);
+        mBPM.setTextSize(ts);
+        //ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, R.id.rythmspinner1, list );
+    }
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,6 +75,7 @@ public class ControlsFragment extends Fragment {
         mMinutes = (EditText) view.findViewById(R.id.editTextMinutes);
         mSeconds = (EditText) view.findViewById(R.id.editTextSeconds);
         mBPM = (EditText) view.findViewById(R.id.paceText);
+
         //mBPM.setFilters(new InputFilter[]{ new InputFilter_MinMax(60, 240)}); /// broken
 
         mTimeSigNum = (Spinner) view.findViewById(R.id.rythmspinner1); //Log.d("ControlsFragment", "sp =" + mTimeSigNum);
@@ -59,7 +86,7 @@ public class ControlsFragment extends Fragment {
 
 
         mLayout = (LinearLayout) view.findViewById(R.id.controlLayout);
-        mLayout.setBackgroundColor(Color.LTGRAY);
+        mLayout.setBackgroundColor(Color.DKGRAY);
 
         mLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0,1.0f ));
 

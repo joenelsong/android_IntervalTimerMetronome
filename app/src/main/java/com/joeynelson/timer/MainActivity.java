@@ -1,5 +1,6 @@
 package com.joeynelson.timer;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -9,7 +10,10 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,14 +21,21 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
-{   private boolean logging = true;
+{   private boolean logging = false;
     protected boolean FirstLaunch = true;
     private int MAX_NUMBER_OF_CONTROLS = 10;  // used for clean up
     private int ON_RESUME_COUNT =2;
@@ -42,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //~// Widgets //~//
     private Button mStartButton;
     private Button mStopButton;
+    private Button mSaveButton;
     private String mTimerState = "STOPPED";
     private TextView mTime;
 
@@ -76,6 +88,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected MediaPlayer mMediaPlayer_End;
     protected int mMediaPlayer_End_SOUNDFILE_ID = R.raw.timer_end_buzzer;
 
+    //private AdView mAdView;
+
+    // Realm database
+    private Realm realm;
+    private String mTimerSaveName ="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +105,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Initialize Widgets //
         mStartButton = (Button) findViewById(R.id.start_button);
-        mStartButton.setOnClickListener(this);
-
         mStopButton = (Button) findViewById(R.id.clear_button);
+        mSaveButton = (Button) findViewById(R.id.save_button);
+
+        // Set Button Listeners
+        mStartButton.setOnClickListener(this);
         mStopButton.setOnClickListener(this);
+        mSaveButton.setOnClickListener(this);
+
 
         mTime = (TextView) findViewById(R.id.clock_display);
         // Create Flashing Text Animation
@@ -99,6 +121,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFlashingTextAnimation.setStartOffset(20);
         mFlashingTextAnimation.setRepeatMode(Animation.REVERSE);
         mFlashingTextAnimation.setRepeatCount(Animation.INFINITE);
+
+        // Google Add View
+        //AdView mAdView = (AdView) findViewById(R.id.adView);
+        //AdRequest adRequest = new AdRequest.Builder().build();
+        //mAdView.loadAd(adRequest);
+
+
+        // Initialize Realm in Application
+        Realm.init(getApplicationContext());
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
+        Realm.deleteRealm(realmConfiguration);
+        realm = Realm.getInstance(realmConfiguration);
     }
 
     @Override
@@ -111,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             for (int i = 0; i < mUSER_NumberOfControls; i++) {
                 if (mControlsFragments[i].getSwitchState()) {
                     if (logging)
-                        //Log.d("onClick", "if (mControlsFragments[i].getSwitchState())" + " getSwitchState(" + i + ") = " + mControlsFragments[i].getSwitchState());
+                        if (logging) Log.d("onClick", "if (mControlsFragments[i].getSwitchState())" + " getSwitchState(" + i + ") = " + mControlsFragments[i].getSwitchState());
                     mNumActiveTimerSwitches++;
                 }
 
@@ -122,6 +156,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         case R.id.start_button: Log.d("onClick", "case R.id.start_button");
             mStartButton.setEnabled(false);
             mStopButton.setEnabled(true); // Enable Stop Button
+            // Set Colors on Buttons
+            mStartButton.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.startbutton_disabled)); // dynamically changes color for disabled button
+            mStopButton.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.stopbutton)); // dynamically changes color for disabled button
 
             if (mTimerState.equals("STOPPED") && mActiveTimerIndex < mUSER_NumberOfControls)   // If a timer hasn't already started then start one, If a timer has started, dont start another one!
             { Log.d("onClick", "if (mTimerState.equals(\"STOPPED\") && mActiveTimerIndex < mUSER_NumberOfControls)");
@@ -141,9 +178,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // Calculate Clock tick speed for metronome
 
                     int bps = mControlsFragments[mActiveTimerIndex].getBpm()/15; // beats per second @ enhanced speed (that is why it's 15)
-                    int tickRate = Math.round( 1000/bps );  // 1000ms divided by beats per second // Rounded to conver to integer
 
-                    Log.d("onClick", "  Create CountDownTimer realTickRate = " + tickRate);
+                    // 1000ms divided by beats per second // Rounded to conver to integer
+                    int tickRate = (bps > 0) ? Math.round( 1000/bps ) : 1; // this avoids bps being 0 which would cause a divide by 0 error
+
+                    if (logging) Log.d("onClick", "  Create CountDownTimer realTickRate = " + tickRate);
 
                     // Configure Time Signature Settings
                     mTimeSignatureNumerator=mControlsFragments[mActiveTimerIndex].getTimeSignatureNumerator();
@@ -164,11 +203,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
             else if (mTimerState.equals("STARTED"))
-            { Log.d("onClick", "else if (mTimerState.equals(\"STARTED\"))");
+            { if (logging) Log.d("onClick", "else if (mTimerState.equals(\"STARTED\"))");
                 mTimerState = "PAUSED"; // If the timer had already started, it should now be paused
             }
             else if (mTimerState.equals("PAUSED"))
-            { Log.d("onClick", "else if (mTimerState.equals(\"PAUSED\"))");
+            { if (logging) Log.d("onClick", "else if (mTimerState.equals(\"PAUSED\"))");
                 mTimerState = "STARTED";
             }
 
@@ -192,7 +231,78 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             CleanUp();
 
             mStartButton.setEnabled(true); /// re-enable start button
+            // Set Colors on Buttons
+            mStartButton.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.startbutton)); // dynamically changes color for disabled button
+            mStopButton.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.stopbutton_disabled)); // dynamically changes color for disabled button
             break;
+
+            case R.id.save_button:
+                if (logging) Log.d("onClick() ++ed", "case R.id.save_button");
+
+                /**
+                 Dialog Box to prompt user for the name of the timer
+                 **/
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Name this group of timers");
+
+                // set the input
+                final EditText input = new EditText(MainActivity.this);
+
+                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+                // Set up the buttons
+                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mTimerSaveName = input.getText().toString();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+
+                // Generate DateTimeString to be used as Primary key for Realm Objects
+                String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+
+                // Initialize Realm in Application
+                realm.beginTransaction();
+
+                // Create a TimerGroup_Realm Object
+                TimerGroup_Realm timerGroup = new TimerGroup_Realm();
+                timerGroup.setDateTime(currentDateTimeString);
+
+                for (int i=0; i < mUSER_NumberOfControls; i++) {
+                    ControlsFragment cFrag = mControlsFragments[i];
+
+                    // Create a Timer_Realm Object
+                    Timer_Realm timer = new Timer_Realm();
+                    timer.setDateTime_timerNumber(currentDateTimeString+Integer.toString(i));
+                    timer.setName(mTimerSaveName+Integer.toString(i));
+                    timer.setQueue(cFrag.getSwitchState());
+                    timer.setMinutes(cFrag.getMinutes());
+                    timer.setSeconds(cFrag.getSeconds());
+                    timer.setBpm(cFrag.getBpm());
+                    timer.setTs_numerator(cFrag.getTimeSignatureNumerator());
+                    timer.setTs_denominator(cFrag.getTimeSignatureDenominator());
+
+                    // add Timer_Realm Object to TimerGroup_Realm Object
+                    timerGroup.getmTimers().add(timer);
+                }
+                // Commit Realm Transaction
+                realm.commitTransaction();
+
+
+                //Prefs.with(this).setPreLoad(true);
+
+
         }
 
     }
@@ -333,11 +443,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void highlightTimer(int x)    {        mControlsFragments[x].setLayoutColor(Color.GREEN);    }
+    public void highlightTimer(int x)    {        mControlsFragments[x].setLayoutColor(ContextCompat.getColor(getApplicationContext(),R.color.startbutton_on));    }
 
-    public void unhighlightTimer(int x)    {        mControlsFragments[x].setLayoutColor(Color.LTGRAY);    }
+    public void unhighlightTimer(int x)    {        mControlsFragments[x].setLayoutColor(Color.DKGRAY);    }
 
-    public void endhighlightTimer(int x)    {        mControlsFragments[x].setLayoutColor(Color.RED);    }
+    public void endhighlightTimer(int x)    {        mControlsFragments[x].setLayoutColor(ContextCompat.getColor(getApplicationContext(),R.color.stopbutton_on));   }
 
     public void setNewActiveTimerIndex(int x)   { mActiveTimerIndex=+1% mUSER_NumberOfControls; }
 
@@ -362,10 +472,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
             return true;
         }
-        else if (id== R.id.action_about) {
-            Toast.makeText(this, "Inspiration for this timer comes from various interval training activities with Sigung Colin Davey of Colin Davey Combat Arts", Toast.LENGTH_LONG).show();
-            return true;
-        }
+        //else if (id== R.id.action_about) {
+        //    Toast.makeText(this, "Inspiration for this timer comes from various interval training activities with Sigung Colin Davey of Colin Davey Combat Arts", Toast.LENGTH_LONG).show();
+        //    return true;
+        // }
 
         return super.onOptionsItemSelected(item);
     }
@@ -381,6 +491,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lastNumberOfControls = mUSER_NumberOfControls;
 
         mUSER_NumberOfControls = Integer.parseInt(savedValues.getString("pref_num_of_timers", "3"));
+
         mUSER_NumberOfTransitionBeeps = Integer.parseInt(savedValues.getString("pref_num_of_transition_beeps", "5"));
         mUSER_TimerExpirationWarning = Integer.parseInt(savedValues.getString("pref_expiration_warning_duration", "10000"));
         mUSER_FirstBeatAccent = savedValues.getBoolean("pref_first_beat_accent", true);
@@ -414,7 +525,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 FragmentTransaction fragTranRemove = fragManRemove.beginTransaction();
 
 
-                for (int i = diff; i < lastNumberOfControls; i++) {
+                for (int i = mUSER_NumberOfControls; i < lastNumberOfControls; i++) {
                     tag = "cfrag" + i;
                     ControlsFragment oldFragment = (ControlsFragment) fragManRemove.findFragmentByTag(tag);
                     if (oldFragment != null) {
@@ -460,7 +571,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //tag = "cfrag" + (mUSER_NumberOfControls - b - 1);
                     mControlsFragments[b] = (ControlsFragment) getSupportFragmentManager().findFragmentByTag(tag); //if (logging) Log.d("ClockFragment", "OnClick = " + cFrag);
                 }
+
             }
+            // Dynamically resize text on Controls Fragment depending on how many controls are present
+            for (int i=0; i < mUSER_NumberOfControls; i++)
+            {
+                mControlsFragments[i].setTextSize(32-(2*(mUSER_NumberOfControls)));
+            }
+
         }
         ON_RESUME_COUNT++;
 

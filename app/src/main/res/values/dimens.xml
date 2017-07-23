@@ -1,5 +1,8 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">10dp</dimen>
-    <dimen name="activity_vertical_margin">10dp</dimen>
+    <dimen name="activity_horizontal_margin">5dip</dimen>
+    <dimen name="activity_vertical_margin">5dip</dimen>
+    <dimen name="fontsize_label"> 12dip</dimen>
+    <dimen name="fontsize_time"> 12dip</dimen>
+    <dimen name="fontsize_timeSignature"> 12dip</dimen>
 </resources>

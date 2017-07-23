@@ -7,13 +7,13 @@
         android:entries="@array/timer_count_options"
         android:entryValues="@array/timer_count_options"
         android:title="Number of Intervals"
-        android:summary="Select between 1 and 10 intervals"
+        android:summary="Select how many interval timers you want to use"
         >
     </ListPreference>
     <EditTextPreference
         android:key="pref_num_of_transition_beeps"
         android:title="Transition Beeps"
-        android:summary="Specify the number beeps to hear between intervals"
+        android:summary="Select the number beeps to hear between intervals"
         android:defaultValue="3"
         android:inputType="number"
         android:textSize="@dimen/abc_text_size_small_material"
@@ -23,7 +23,7 @@
     <CheckBoxPreference
         android:key="pref_first_beat_accent"
         android:defaultValue="true"
-        android:title="First Beat Accent"
+        android:title="Metronome First Beat Accent"
         android:summaryOn="Accent is currently turned on"
         android:summaryOff="Accent is currently turned off"
         >

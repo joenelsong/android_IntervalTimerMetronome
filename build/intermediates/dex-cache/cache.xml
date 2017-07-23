@@ -2,32 +2,274 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\classes.jar"
+        is-multidex="false"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.0\jars\classes.jar"
         jumboMode="false"
+        optimize="true"
         revision="22.0.1"
-        sha1="f8efd0096475e0daf054267b61544e10dc776503">
-        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\release\classes-21b4f8e91f87534e8f854b7659cc8e413c447267.jar" />
+        sha1="4fcf0b1879f8caf497c073e1432d398e9e2988c1">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\release\com.android.support-appcompat-v7-23.0.0_b7c629d4e00cd9f701bd5dda909a12ab0fe47b03.jar" />
     </item>
     <item
-        jar="C:\Users\joey\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.1\support-annotations-22.2.1.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-analytics\7.8.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
         revision="22.0.1"
-        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
-        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\release\support-annotations-22.2.1-2b8873013db38ddd14f93d59b94cbc33c44a7b88.jar" />
+        sha1="0124ce31248c0e8acfa2b28283c6d1a4d76e73d2">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-analytics-7.8.0_6d11eea1ea5ea4b9e4b3a99776961421a3c6c1f3\classes.dex" />
     </item>
     <item
-        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.1\jars\classes.jar"
+        is-multidex="false"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\24.0.0\jars\classes.jar"
         jumboMode="false"
+        optimize="true"
         revision="22.0.1"
-        sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
-        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\release\classes-5b686e4515a1a43114814b529efbae1c4fab4503.jar" />
+        sha1="3bd97cfefd783e9de1dd1c30574a6adb44b4409b">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\com.android.support-support-vector-drawable-24.0.0_57630960dd99663bd1b23116439d215644ba940a.jar" />
     </item>
     <item
-        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\libs\internal_impl-22.2.1.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
         revision="22.0.1"
-        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
-        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\release\internal_impl-22.2.1-76228ed60b64164a35b9a6b256a6b635e88d048a.jar" />
+        sha1="4fcf0b1879f8caf497c073e1432d398e9e2988c1">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-23.0.0_b7c629d4e00cd9f701bd5dda909a12ab0fe47b03\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\7.8.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="22.0.1"
+        sha1="e23ea11124bb700eeddd4ab7aa848c615f493850">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-appindexing-7.8.0_f10fa64bd8454b04b1bc32a5b37e6f9f0546a94d\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.0\jars\libs\internal_impl-23.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="22.0.1"
+        sha1="8bd336eeae661e8311330284897ee07f8ebaa297">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\release\internal_impl-23.0.0_dea1a941edf2e26442c6afc8f41311d62372fe46.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\7.8.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="22.0.1"
+        sha1="1ff30fa49c07a08c3035d7218a3efebf5680d522">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-ads-7.8.0_167495fe5a6f0e85a2c09739971c67295acce700\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="22.0.1"
+        sha1="c0c912d58c9468b1f9d9769c8975afdf2c85d681">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-base-7.8.0_d9654e4d4478e2112b9fbfa93d414722227654de.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.0\jars\libs\internal_impl-23.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="22.0.1"
+        sha1="8bd336eeae661e8311330284897ee07f8ebaa297">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-23.0.0_dea1a941edf2e26442c6afc8f41311d62372fe46\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="22.0.1"
+        sha1="1ff30fa49c07a08c3035d7218a3efebf5680d522">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-ads-7.8.0_167495fe5a6f0e85a2c09739971c67295acce700.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.getkeepsafe.relinker\relinker\1.2.2\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="22.0.1"
+        sha1="b64dd5f01bc37de289f90fd59299b0c76d119611">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.getkeepsafe.relinker-relinker-1.2.2_2e7cfcdb6087535ca14f6d26cbbae84835d92b2e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.8.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="22.0.1"
+        sha1="c0c912d58c9468b1f9d9769c8975afdf2c85d681">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-base-7.8.0_d9654e4d4478e2112b9fbfa93d414722227654de\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="22.0.1"
+        sha1="8413c27b45b7fe61dca4a98159f65e2cee215f5a">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\release\com.android.support-support-v4-23.0.0_5dd44f74efcc7c42d316268af9c153c873819b38.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\io.realm\realm-android-library\2.3.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="22.0.1"
+        sha1="205155180b7747a96c076484ba0014e4bcacb33d">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\io.realm-realm-android-library-2.3.1_d5560272bd4c7d1ba1ddbe39f3c9795c27b6a752.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="22.0.1"
+        sha1="8413c27b45b7fe61dca4a98159f65e2cee215f5a">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-23.0.0_5dd44f74efcc7c42d316268af9c153c873819b38\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\io.realm\realm-android-library\2.3.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="22.0.1"
+        sha1="205155180b7747a96c076484ba0014e4bcacb33d">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\transforms\dex\debug\folders\1000\10\io.realm-realm-android-library-2.3.1_d5560272bd4c7d1ba1ddbe39f3c9795c27b6a752\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\joey\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\24.0.0\support-annotations-24.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="22.0.1"
+        sha1="2943c74db6d4346ab8c6531adac91fa05c137c40">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\support-annotations-24.0.0_ec572fe4da1841371074c43dfdf04bbf49068f60.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\24.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="22.0.1"
+        sha1="0874286cc2fd88d54fdf130e9d5372730da6de97">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-24.0.0_3dff3e82e07cf00e1bf8cba3a928c41e064b4f1a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\joey\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.0\support-annotations-23.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="22.0.1"
+        sha1="990e7f98a7bad86a40b1f0bcfeb039023afd0839">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\release\support-annotations-23.0.0_7b175543ecba679bb1934b2afd832e44e13353e7.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="22.0.1"
+        sha1="4fe983001a0c254a36dde0aadb109079e678f4a0">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_8d222f824caf32da4162369ace7b409c8d6b3a70\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-analytics\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="22.0.1"
+        sha1="0124ce31248c0e8acfa2b28283c6d1a4d76e73d2">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-analytics-7.8.0_6d11eea1ea5ea4b9e4b3a99776961421a3c6c1f3.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\joey\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.0\support-annotations-23.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="22.0.1"
+        sha1="990e7f98a7bad86a40b1f0bcfeb039023afd0839">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-23.0.0_7b175543ecba679bb1934b2afd832e44e13353e7\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\24.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="22.0.1"
+        sha1="e70f608219ed6b974644c333249ab2bb7b71de98">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\com.android.support-animated-vector-drawable-24.0.0_d0eb4e072982960b0d20c43433bce32ba31f59de.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.0.0\jars\libs\internal_impl-24.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="22.0.1"
+        sha1="fcaf463e10e69c1923ccf1edeba3b4196d239e00">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\internal_impl-24.0.0_127ed35a764a6187a3ab55fe2dca0188c7263445.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="22.0.1"
+        sha1="c85c42add86bb5149b20124be3f0f9305158470a">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_5aeefef8eefefeb267783bd6ee6a7e581925fde0\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.getkeepsafe.relinker\relinker\1.2.2\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="22.0.1"
+        sha1="b64dd5f01bc37de289f90fd59299b0c76d119611">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\com.getkeepsafe.relinker-relinker-1.2.2_2e7cfcdb6087535ca14f6d26cbbae84835d92b2e.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\joey\.gradle\caches\modules-2\files-2.1\io.realm\realm-annotations\2.3.1\1c1c75a7e1dfee58c51822987dc658f93e036c81\realm-annotations-2.3.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="22.0.1"
+        sha1="1c1c75a7e1dfee58c51822987dc658f93e036c81">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\transforms\dex\debug\folders\1000\10\realm-annotations-2.3.1_687b8f7621d79467c5dd5cab964447426de26faa\classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.0.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="22.0.1"
+        sha1="2f7e6e2dad1bccaf68a8820820adc6c0d5b96d37">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\com.android.support-support-v4-24.0.0_e58f6ccc0a3214e5345d23d21c5d07b4c1133a3b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\joey\.gradle\caches\modules-2\files-2.1\io.realm\realm-annotations\2.3.1\1c1c75a7e1dfee58c51822987dc658f93e036c81\realm-annotations-2.3.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="22.0.1"
+        sha1="1c1c75a7e1dfee58c51822987dc658f93e036c81">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\realm-annotations-2.3.1_687b8f7621d79467c5dd5cab964447426de26faa.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="22.0.1"
+        sha1="e23ea11124bb700eeddd4ab7aa848c615f493850">
+        <dex dex="C:\Users\joey\Documents\GitHub Projects\android_IntervalTimerMetronome\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-appindexing-7.8.0_f10fa64bd8454b04b1bc32a5b37e6f9f0546a94d.jar" />
     </item>
 
 </items>

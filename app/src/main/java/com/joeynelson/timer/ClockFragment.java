@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 
 public class ClockFragment extends Fragment
 {
-    private boolean logging = true;
+    private boolean logging = false;
     private boolean twoPaneLayout;
 
 
